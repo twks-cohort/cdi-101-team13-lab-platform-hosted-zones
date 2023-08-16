@@ -2,34 +2,34 @@
 
 # define a provider in the account where this subdomain will be managed
 provider "aws" {
-  alias  = "subdomain_dev_twdps_digital"
-  region = "us-east-1"
+  alias  = "subdomain_dev_cdicohorts_thirteen"
+  region = "us-east-2"
   assume_role {
-    role_arn     = "arn:aws:iam::${var.prod_account_id}:role/${var.assume_role}"
-    session_name = "lab-platform-hosted-zones"
+    role_arn     = "arn:aws:iam::${var.nonprod_account_id}:role/${var.assume_role}"
+    session_name = "cdi101team13-lab-platform-hosted-zones"
   }
 }
 
 # create a route53 hosted zone for the subdomain in the account defined by the provider above
-module "subdomain_dev_twdps_digital" {
+module "subdomain_dev_cdicohorts_thirteen" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "2.0.0"
   create  = true
 
   providers = {
-    aws = aws.subdomain_dev_twdps_digital
+    aws = aws.subdomain_dev_cdicohorts_thirteen
   }
 
   zones = {
-    "dev.${local.domain_twdps_digital}" = {
+    "dev.${local.domain_cdicohorts_thirteen}" = {
       tags = {
-        cluster = "prod"
+        cluster = "nonprod"
       }
     }
   }
 
   tags = {
-    pipeline = "lab-platform-hosted-zones"
+    pipeline = "cdi101team13-lab-platform-hosted-zones"
   }
 }
 
@@ -40,21 +40,21 @@ module "subdomain_zone_delegation_dev_twdps_digital" {
   create  = true
 
   providers = {
-    aws = aws.domain_twdps_digital
+    aws = aws.domain_cdicohorts_thirteen
   }
 
   private_zone = false
-  zone_name = local.domain_twdps_digital
+  zone_name = local.domain_cdicohorts_thirteen
   records = [
     {
       name            = "dev"
       type            = "NS"
       ttl             = 172800
-      zone_id         = data.aws_route53_zone.zone_id_twdps_digital.id
+      zone_id         = data.aws_route53_zone.zone_id_cdicohorts_thirteen.id
       allow_overwrite = true
-      records         = lookup(module.subdomain_dev_twdps_digital.route53_zone_name_servers,"dev.${local.domain_twdps_digital}")
+      records         = lookup(module.subdomain_dev_cdicohorts_thirteen.route53_zone_name_servers,"dev.${local.domain_cdicohorts_thirteen}")
     }
   ]
 
-  depends_on = [module.subdomain_dev_twdps_digital]
+  depends_on = [module.subdomain_dev_cdicohorts_thirteen]
 }

@@ -1,21 +1,21 @@
 require 'awspec'
 
-describe route53_hosted_zone('twdps.digital.') do
+describe route53_hosted_zone('cdicohorts-thirteen.') do
   it { should exist }
 end
 
-describe route53_hosted_zone('sandbox-us-east-2.twdps.io.') do
+describe route53_hosted_zone('nonprod-us-east-2.cdicohorts-thirteen.') do
   it { should exist }
 end
 
-describe route53_hosted_zone('sandbox-us-east-2.twdps.digital.') do
+describe route53_hosted_zone('dev.cdicohorts-thirteen.') do
   it { should exist }
 end
 
-describe route53_hosted_zone('preview.twdps.digital.') do
+describe route53_hosted_zone('qa.cdicohorts-thirteen.') do
   it { should exist }
 end
 
-describe route53_hosted_zone('preview.twdps.io.') do
-  it { should exist }
+describe route53_hosted_zone('prod.cdicohorts-thirteen.') do
+  it { should exist}
 end
